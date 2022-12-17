@@ -10,10 +10,12 @@
         "test": "vitest"
     },
     "dependencies": {
+        "lodash": "^4.17.21",
         "vue": "^3.2.45"
     },
     "devDependencies": {
         "@testing-library/vue": "^6.6.1",
+        "@types/lodash": "^4.14.191",
         "@vitejs/plugin-vue": "^4.0.0",
         "@vitest/coverage-c8": "^0.25.6",
         "@vitest/ui": "^0.25.6",

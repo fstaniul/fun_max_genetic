@@ -3,6 +3,9 @@ import vue from "@vitejs/plugin-vue";
 
 export default defineConfig({
     plugins: [vue() as any],
+    define: {
+        "import.meta.vitest": "undefined",
+    },
     test: {
         environment: "happy-dom",
         coverage: {
@@ -10,5 +13,7 @@ export default defineConfig({
             reporter: ["text-summary"],
             reportsDirectory: "coverage",
         },
+        includeSource: ["src/**/*.ts"],
+        restoreMocks: true,
     },
 });
