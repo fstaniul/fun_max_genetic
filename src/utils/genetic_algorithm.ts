@@ -1,4 +1,5 @@
 import { chunk, flatten, noConflict } from "lodash";
+import { Random } from "./random";
 
 export type Population = Individual[];
 export type FittingFunction = (x: number) => number;
@@ -38,7 +39,7 @@ export class Individual {
     size: number;
 
     constructor(size: number, genotype?: number) {
-        if (!genotype) {
+        if (typeof genotype !== "number") {
             genotype = 0;
             for (let i = 0; i < size; i++) {
                 const oneOrZero = Math.round(Math.random());
@@ -94,7 +95,7 @@ export function crossover(
     parent1: Individual,
     parent2: Individual
 ): [Individual, Individual] {
-    const crossoverPoint = Math.floor(Math.random() * parent1.size);
+    const crossoverPoint = Random.getInt(1, parent1.size)
     const mask = (1 << crossoverPoint) - 1;
 
     const child1 = createIndividual(
@@ -110,7 +111,7 @@ export function crossover(
 }
 
 export function mutate(individual: Individual): Individual {
-    const mutationPoint = Math.floor(Math.random() * individual.size);
+    const mutationPoint = Random.getInt(0, individual.size);
     const mask = 1 << mutationPoint;
     return createIndividual(individual.size, individual.genotype ^ mask);
 }

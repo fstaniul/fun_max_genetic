@@ -6,6 +6,7 @@ import {
     mutate,
     selection,
 } from "./genetic_algorithm";
+import { Random } from "./random";
 
 describe("createIndividual", () => {
     test("Should generate individual 111111", () => {
@@ -49,17 +50,6 @@ test("Should crossover two individuals", () => {
     expect(child2.genotype).toEqual(0b011011);
 });
 
-test("Should mutate individual", () => {
-    vi.spyOn(Math, "random").mockReturnValueOnce(2 / 6);
-
-    const individual = createIndividual(6, 0b101011);
-
-    const mutated = mutate(individual);
-
-    expect(mutated.genotype).toEqual(0b101111);
-    expect(mutated.size).toEqual(6);
-});
-
 test("Should select population of same size", () => {
     const population = createPopulation(6, 5);
     const individualsScore = population.map((i) => i.score((x) => 2 * x + 1));
@@ -67,4 +57,34 @@ test("Should select population of same size", () => {
     const selected = selection(population, individualsScore, populationScore);
 
     expect(selected.length).toEqual(6);
+});
+
+describe("mutation", () => {
+    test.each([
+        [0, 0b00001],
+        [1, 0b00010],
+        [2, 0b00100],
+        [3, 0b01000],
+        [4, 0b10000],
+    ])("Should mutate individual at position %i", (position, expected) => {
+        vi.spyOn(Random, "getInt").mockReturnValue(position);
+        const individual = createIndividual(5, 0b00000);
+        expect(mutate(individual).genotype).toEqual(expected);
+    });
+});
+
+describe("crossover", () => {
+    test.each([
+        [1, 0b00001, 0b11110],
+        [2, 0b00011, 0b11100],
+        [3, 0b00111, 0b11000],
+        [4, 0b01111, 0b10000],
+    ])("Should crossover individual at position %i", (position, expected1, expected2) => {
+        vi.spyOn(Random, "getInt").mockReturnValue(position);
+        const parent1 = createIndividual(5, 0b00000);
+        const parent2 = createIndividual(5, 0b11111);
+        const [child1, child2] = crossover(parent1, parent2);
+        expect(child1.genotype).toEqual(expected1);
+        expect(child2.genotype).toEqual(expected2);
+    });
 });
