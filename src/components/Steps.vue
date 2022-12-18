@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PropType, shallowRef, watch } from "vue";
+import { computed, PropType, shallowRef, watch } from "vue";
 import { type GeneticAlgorithm } from "../utils/genetic_algorithm";
 
 const props = defineProps({
@@ -11,9 +11,12 @@ const props = defineProps({
 
 const expanded = shallowRef(false);
 
-watch(() => props.steps, () => {
-    expanded.value = false;
-});
+watch(
+    () => props.steps,
+    () => {
+        expanded.value = false;
+    }
+);
 </script>
 
 <template>
@@ -23,11 +26,11 @@ watch(() => props.steps, () => {
                 <code class="code">
                     Iteration {{ step.iteration }}<br />
                     Population: <br />
-                    <span v-for="i in step.population">
-                        &nbsp;&nbsp;&nbsp;&nbsp; - {{ i.toString() }} ({{
-                            i.genotype
-                        }})
-                        <br />
+                    <span v-for="(i, index) in step.population">
+                        &nbsp;&nbsp;&nbsp;&nbsp; -
+                        {{ i.genotype.toString() }} [{{
+                            i.toString()
+                        }}] (score: {{ step.individualsScore[index] }})<br />
                     </span>
                     Score: {{ step.score }}<br />
                 </code>
