@@ -2,6 +2,7 @@
 import { computed, ref } from "vue";
 import { useGeneticAlgorithm } from "../composables/useGeneticAlgorithm";
 import Result from '../components/Result.vue';
+import Steps from '../components/Steps.vue';
 
 const aRef = ref(0);
 const bRef = ref(0);
@@ -33,7 +34,7 @@ async function start() {
         crossingProbability: crossoverRate.value,
         mutationProbability: mutationRate.value,
         maxBestOccurrences: 5,
-        maxIterations: 10000,
+        maxIterations: 100000,
         fittingFunction: (x) => a * x ** 3 + b * x ** 2 + c * x + d,
     });
 }
@@ -127,7 +128,8 @@ async function start() {
                 </button>
             </div>
         </div>
-        <Result :result="result" />
+        <Steps class="steps" :steps="steps" />
+        <Result class="result" :result="result" />
     </div>
 </template>
 
@@ -140,4 +142,10 @@ async function start() {
     margin-top: 3rem
 .forms + .forms
     margin-top: 1.5rem
+.steps
+    margin-top: 3rem
+.result
+    margin-top: 2rem
+.container
+    padding-bottom: 3rem
 </style>

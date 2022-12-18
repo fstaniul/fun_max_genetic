@@ -239,7 +239,7 @@ export class GeneticAlgorithm {
 
             // 2. crossing
             newPopulation = flatten(
-                chunk(population, 2).map(([parent1, parent2]) => {
+                chunk(newPopulation, 2).map(([parent1, parent2]) => {
                     if (!parent2) return [parent1];
 
                     if (Math.random() <= this.options.crossingProbability) {
