@@ -96,12 +96,12 @@ describe("selection", () => {
         const individualsScore = [1, 1, 5, 3, 2];
         const populationScore = individualsScore.reduce((a, b) => a + b, 0);
 
-        vi.spyOn(Random, 'getFloat')
-            .mockReturnValueOnce(6 / populationScore) // select 3
-            .mockReturnValueOnce(5 / populationScore) // select 3
-            .mockReturnValueOnce(11 / populationScore) // select 5
-            .mockReturnValueOnce(2 / populationScore) // select 2
-            .mockReturnValueOnce(8 / populationScore) // select 4
+        vi.spyOn(Random, 'getInt')
+            .mockReturnValueOnce(3) // select 3
+            .mockReturnValueOnce(5) // select 3
+            .mockReturnValueOnce(11) // select 5
+            .mockReturnValueOnce(2) // select 2
+            .mockReturnValueOnce(8) // select 4
 
         const selected = selection(dummyPopulation as unknown as Population, individualsScore, populationScore);
 

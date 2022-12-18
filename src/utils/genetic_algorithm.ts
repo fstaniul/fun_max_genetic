@@ -133,13 +133,12 @@ export function fitness(
 }
 
 export function selection(population: Population, individualsScore: number[], populationScore: number): Population {
-    const individualsFitting = individualsScore.map((score) => score / populationScore);
     const newPopulation: Population = [];
     for (let i = 0; i < population.length; i++) {
-        const fitting = Random.getFloat(0, 1);
+        const fitting = Random.getInt(0, populationScore);
         let sum = 0;
         for (let k = 0; k < population.length; k++) {
-            sum += individualsFitting[k];
+            sum += individualsScore[k];
             if (sum >= fitting) {
                 newPopulation.push(createIndividual(population[k].size, population[k].genotype));
                 break;
