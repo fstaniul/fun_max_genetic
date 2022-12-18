@@ -5,25 +5,26 @@ export function useGeneticAlgorithm() {
     const steps = shallowRef<GeneticAlgorithm.IterationData[]>([]);
     const result = shallowRef<GeneticAlgorithm.Result | undefined>(undefined);
 
-    const run = (options: GeneticAlgorithm.Options & Omit<GeneticAlgorithm.RunOptions, 'afterIteration'>) => {
+    const run = (
+        options: GeneticAlgorithm.Options & GeneticAlgorithm.RunOptions
+    ) => {
         steps.value = [];
         result.value = undefined;
 
         const ga = new GeneticAlgorithm(options);
-
         result.value = ga.run({
             ...options,
-            afterIteration: (_, data) => {
+            afterIteration(data) {
                 steps.value.push(data);
-            }
+            },
         });
 
-        return Promise.resolve();
-    }
+        return result.value;
+    };
 
     return {
         steps,
         result,
         run,
-    }
+    };
 }

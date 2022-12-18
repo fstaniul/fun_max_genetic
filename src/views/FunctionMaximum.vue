@@ -1,11 +1,12 @@
 <script lang="ts" setup>
 import { computed, ref } from "vue";
 import { useGeneticAlgorithm } from "../composables/useGeneticAlgorithm";
+import Result from '../components/Result.vue';
 
-const aRef = ref();
-const bRef = ref();
-const cRef = ref();
-const dRef = ref();
+const aRef = ref(0);
+const bRef = ref(0);
+const cRef = ref(0);
+const dRef = ref(0);
 const populationSize = ref(6);
 const mutationRate = ref(0.2);
 const crossoverRate = ref(0.8);
@@ -21,26 +22,20 @@ const runDisabled = computed(() => {
 });
 
 async function start() {
-    const a = aRef.value;
-    const b = bRef.value;
-    const c = cRef.value;
-    const d = dRef.value;
+    const a = aRef.value || 0;
+    const b = bRef.value || 0;
+    const c = cRef.value || 0;
+    const d = dRef.value || 0;
 
-    running.value = true;
-
-    await run({
+    run({
         populationSize: populationSize.value,
         genotypeSize: 5,
         crossingProbability: crossoverRate.value,
         mutationProbability: mutationRate.value,
         maxBestOccurrences: 5,
         maxIterations: 10000,
-        fittingFunction: (x) => (a * (x ** 3)) + (b * (x ** 2)) + (c * x) + d,
+        fittingFunction: (x) => a * x ** 3 + b * x ** 2 + c * x + d,
     });
-
-    console.log(result.value);
-
-    running.value = false;
 }
 </script>
 
@@ -127,15 +122,12 @@ async function start() {
         </div>
         <div class="row forms">
             <div class="twelve columns">
-                <button
-                    class="button-primary"
-                    :disabled="runDisabled"
-                    @click="start"
-                >
+                <button class="button-primary" :disabled="runDisabled" @click="start">
                     Find maximum
                 </button>
             </div>
         </div>
+        <Result :result="result" />
     </div>
 </template>
 

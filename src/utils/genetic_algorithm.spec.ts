@@ -4,6 +4,7 @@ import {
     createPopulation,
     crossover,
     mutate,
+    Population,
     selection,
 } from "./genetic_algorithm";
 import { Random } from "./random";
@@ -88,3 +89,22 @@ describe("crossover", () => {
         expect(child2.genotype).toEqual(expected2);
     });
 });
+
+describe("selection", () => {
+    test('test selection', () => {
+        const dummyPopulation = [1, 2, 3, 4, 5].map((i) => createIndividual(5, i));
+        const individualsScore = [1, 1, 5, 3, 2];
+        const populationScore = individualsScore.reduce((a, b) => a + b, 0);
+
+        vi.spyOn(Random, 'getFloat')
+            .mockReturnValueOnce(6 / populationScore) // select 3
+            .mockReturnValueOnce(5 / populationScore) // select 3
+            .mockReturnValueOnce(11 / populationScore) // select 5
+            .mockReturnValueOnce(2 / populationScore) // select 2
+            .mockReturnValueOnce(8 / populationScore) // select 4
+
+        const selected = selection(dummyPopulation as unknown as Population, individualsScore, populationScore);
+
+        expect(selected.map(s => s.genotype)).toEqual([3, 3, 5, 2, 4]);
+    });
+})
