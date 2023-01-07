@@ -19,7 +19,7 @@ const items = ref<BackpackItem[]>(
   ).map(([weight, value]) => ({ weight, value })) as BackpackItem[]
 );
 
-const maximumWeight = ref(5);
+const maximumWeight = ref(52);
 const maximumIterations = ref(10000);
 
 const populationSize = ref(10);
@@ -113,9 +113,14 @@ function solve() {
     <div>
       <button class="button button-primary" @click="solve">Solve</button>
     </div>
-    <Steps :steps="steps" />
-    <Result :result="result" />
+    <Steps class="steps" :steps="steps" />
+    <Result class="result" :result="result" />
   </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="sass" scoped>
+.steps
+    margin-top: 3rem
+.result
+    margin-top: 2rem
+</style>

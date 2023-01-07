@@ -12,8 +12,6 @@ const populationSize = ref(6);
 const mutationRate = ref(0.2);
 const crossoverRate = ref(0.8);
 
-const running = ref(false);
-
 const { steps, result, run } = useGeneticAlgorithm();
 
 const runDisabled = computed(() => {
@@ -34,7 +32,7 @@ async function start() {
         crossingProbability: crossoverRate.value,
         mutationProbability: mutationRate.value,
         maxBestOccurrences: 5,
-        maxIterations: 100000,
+        maxIterations: 30000,
         fittingFunction: (x) => a * x ** 3 + b * x ** 2 + c * x + d,
     });
 }
@@ -89,34 +87,42 @@ async function start() {
         </div>
         <div class="row forms">
             <div class="three columns">
+                <label for="aInput">a</label>
                 <input
                     class="u-full-width"
                     type="number"
                     placeholder="a"
+                    id="aInput"
                     v-model="aRef"
                 />
             </div>
             <div class="three columns">
+                <label for="bInput">b</label>
                 <input
                     class="u-full-width"
                     type="number"
                     placeholder="b"
+                    id="bInput"
                     v-model="bRef"
                 />
             </div>
             <div class="three columns">
+                <label for="cInput">c</label>
                 <input
                     class="u-full-width"
                     type="number"
                     placeholder="c"
+                    id="cInput"
                     v-model="cRef"
                 />
             </div>
             <div class="three columns">
+                <label for="dInput">d</label>
                 <input
                     class="u-full-width"
                     type="number"
                     placeholder="d"
+                    id="dInput"
                     v-model="dRef"
                 />
             </div>
