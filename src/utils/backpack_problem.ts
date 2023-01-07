@@ -19,22 +19,31 @@ export function calculateWeightAndValue(items: BackpackItem[], pickedItems: numb
     return { weight, value };
 }
 
-function findLowestValue(items: BackpackItem[], pickedItems: number): number {
+/**
+ * returns picked item bit that has lowest value/weight ratio
+ */
+export function findLowestValueWeightRatio(items: BackpackItem[], pickedItems: number): number {
+    let lowestValueBit = -1, lowestRatio = Number.MAX_VALUE;
+
+    if (pickedItems === 0) return lowestValueBit;
+
     const len = items.length;
     const last = items.length - 1;
 
-    let lowestValue = Infinity;
-    let lowestValueIndex = last;
-
     for (let i = 0; i < len; i++) {
-        const index = last - i;
-        if ((pickedItems & (1 << i)) && items[index].value < lowestValue) {
-            lowestValue = items[index].value;
-            lowestValueIndex = index;
+        if (!(pickedItems & (1 << i))) continue;
+
+        const itemIndex = last - i;
+        const item = items[itemIndex];
+        const ratio = item.weight === 0 ? Number.MAX_VALUE : item.value / item.weight;
+
+        if (ratio < lowestRatio) {
+            lowestValueBit = i;
+            lowestRatio = ratio;
         }
     }
 
-    return lowestValueIndex;
+    return lowestValueBit;
 }
 
 export function ensureWeightIsBelowMaximum(items: BackpackItem[], pickedItems: number, maxWeight: number): number {
@@ -42,17 +51,12 @@ export function ensureWeightIsBelowMaximum(items: BackpackItem[], pickedItems: n
 
     const { weight } = calculateWeightAndValue(items, pickedItems);
 
-    console.log(weight, maxWeight);
-    console.log(pickedItems.toString(2).padStart(items.length, "0"));
-    console.table(items);
-
     if (weight <= maxWeight) {
         return pickedItems;
     }
 
-    const lowestValueIndex = findLowestValue(items, pickedItems);
-    const lowestValueBit = items.length - lowestValueIndex - 1;
+    const lowestValueBit = findLowestValueWeightRatio(items, pickedItems);
     const lowestValueMask = 1 << lowestValueBit;
 
-    return ensureWeightIsBelowMaximum(items, pickedItems ^ (lowestValueMask), maxWeight);
+    return ensureWeightIsBelowMaximum(items, pickedItems ^ lowestValueMask, maxWeight);
 }
